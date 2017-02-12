@@ -15,7 +15,7 @@ class EnumTest extends TestCase
         $this->assertInstanceOf(Enum::class, new class extends Enum{});
     }
 
-    public function enumDataProvider() {
+    public function enumDataProvider() : array {
         return [
             [
                 [
@@ -39,6 +39,10 @@ class EnumTest extends TestCase
                     const PASSIVE = 0;
                 }
             ],
+            [
+                [],
+                new class extends Enum { }
+            ],
         ];
     }
 
@@ -46,7 +50,7 @@ class EnumTest extends TestCase
      * @test
      * @dataProvider enumDataProvider
      */
-    public function listEnumOptions($expectedOptions, $enum) {
+    public function listEnumOptions(array $expectedOptions, Enum $enum) {
         $this->assertEquals($expectedOptions, $enum::listOptions());
     }
 
@@ -54,7 +58,7 @@ class EnumTest extends TestCase
      * @test
      * @dataProvider enumDataProvider
      */
-    public function listEnumKeys($expectedOptions, $enum) {
+    public function listEnumKeys(array $expectedOptions, Enum $enum) {
         $this->assertEquals(array_keys($expectedOptions), $enum::listKeys());
     }
 
@@ -62,7 +66,7 @@ class EnumTest extends TestCase
      * @test
      * @dataProvider enumDataProvider
      */
-    public function listEnumValues($expectedOptions, $enum) {
+    public function listEnumValues(array $expectedOptions, Enum $enum) {
         $this->assertEquals(array_values($expectedOptions), $enum::listValues());
     }
 
@@ -73,7 +77,114 @@ class EnumTest extends TestCase
         $enum = new class('one') extends Enum {
             const ONE = 'one';
         };
+
         $this->assertEquals('one', $enum->getValue());
     }
 
+    /**
+     * @test
+     */
+    public function createEnumWithInvalidValue() {
+        $this->expectException('\InvalidArgumentException');
+
+        new class('invalid value') extends Enum {
+            const ONE = 'one';
+        };
+    }
+
+    /**
+     * @test
+     * @dataProvider enumSetDataProvider
+     *
+     * @param $expected
+     * @param $enum
+     */
+    public function setEnumValue($expected, $enum, $value) {
+        $enum->setValue($value);
+        $this->assertEquals($expected, $enum->getValue());
+    }
+
+    public function enumSetDataProvider() {
+        return [
+            [
+                'one',
+                new class extends Enum {
+                    const ONE = 'one';
+                    const TWO = 'two';
+                },
+                'one'
+            ],
+            [
+                'active',
+                new class extends Enum {
+                    const ACTIVE = 'active';
+                    const PASSIVE = 'passive';
+                },
+                'active'
+            ]
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function setInvalidValue() {
+        $this->expectException('\InvalidArgumentException');
+        $enum = new class extends Enum {
+            const ONE = 'one';
+        };
+
+        $enum->setValue('invalid value');
+    }
+
+    /**
+     * @test
+     */
+    public function writeEnumValue() {
+        $this->expectOutputString('one');
+
+        echo new class('one') extends Enum {
+            const ONE = 'one';
+        };
+    }
+
+    /**
+     * @test
+     */
+    public function checkIfKeyIsValid() {
+        $enum = new class('one') extends Enum {
+            const ONE = 'one';
+        };
+
+        $this->assertTrue($enum::isValidKey('ONE'));
+        $this->assertFalse($enum::isValidKey('TWO'));
+    }
+
+    /**
+     * @test
+     */
+    public function getEnumKeyByValue() {
+        $enum = new class('one') extends Enum {
+            const ONE = 'one';
+        };
+
+        $this->assertEquals('ONE', $enum::getKeyByValue('one'));
+    }
+
+    /**
+     * @test
+     */
+    public function checkIfEnumsAreEqual() {
+        $enumFirst = new class('one') extends Enum {
+            const ONE = 'one';
+            const TWO = 'two';
+        };
+
+        $enumSecond = new class('one') extends Enum {
+            const ONE = 'one';
+            const TWO = 'two';
+        };
+
+        $this->assertTrue($enumFirst->isEqualTo($enumSecond));
+    }
 }
