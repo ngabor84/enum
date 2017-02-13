@@ -42,4 +42,5 @@ Status::getKeyByValue('passive'); // return 'PASSIVE'
 Status::listOptions(); // return ['ACTIVE' => 'active', 'PASSIVE' => 'passive']
 Status::listKeys(); // return ['ACTIVE', 'PASSIVE']
 Status::listValues(); // return ['active', 'passive']
+Status::getDefaultValue(); // return 'active' (it's the first constants value by default, but this method is also overridable)
 ```

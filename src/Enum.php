@@ -68,4 +68,10 @@ abstract class Enum {
         return array_values(self::listOptions());
     }
 
+    public static function getDefaultValue() {
+        $values = self::listValues();
+
+        return !empty($values) ? $values[0] : null;
+    }
+
 }

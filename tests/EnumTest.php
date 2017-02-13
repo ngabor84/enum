@@ -187,4 +187,15 @@ class EnumTest extends TestCase
 
         $this->assertTrue($enumFirst->isEqualTo($enumSecond));
     }
+
+    /**
+     * @test
+     */
+    public function getEnumDefaultValue() {
+        $enum = new class('one') extends Enum {
+            const ONE = 'one';
+        };
+
+        $this->assertEquals('one', $enum::getDefaultValue());
+    }
 }
