@@ -74,4 +74,8 @@ abstract class Enum {
         return !empty($values) ? $values[0] : null;
     }
 
+    public static function isDefaultValue($value) {
+        return $value == self::getDefaultValue();
+    }
+
 }
