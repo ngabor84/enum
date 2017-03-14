@@ -1,7 +1,6 @@
 {
   "name" : "ngabor84/enum",
   "description" : "Enum is a simple implementation of php enumeration type.",
-  "version" : "0.2.0",
   "homepage" : "https://github.com/ngabor84/enum",
   "license": "MIT",
   "authors": [
