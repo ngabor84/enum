@@ -61,21 +61,21 @@ abstract class Enum {
     }
 
     public static function listKeys() : array {
-        return array_keys(self::listOptions());
+        return array_keys(static::listOptions());
     }
 
     public static function listValues() : array {
-        return array_values(self::listOptions());
+        return array_values(static::listOptions());
     }
 
     public static function getDefaultValue() {
-        $values = self::listValues();
+        $values = static::listValues();
 
         return !empty($values) ? $values[0] : null;
     }
 
     public static function isDefaultValue($value) {
-        return $value == self::getDefaultValue();
+        return $value == static::getDefaultValue();
     }
 
 }
